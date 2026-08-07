@@ -15,13 +15,13 @@ const Onboarding = ({ isOpen, onClose, onComplete }) => {
 
   const steps = [
     {
-      title: "Welcome to BSNB Banking!",
+      title: "Welcome to QNB Banking!",
       description: "Let's get you started with your new banking experience. We'll show you around the key features.",
       image: "🏦",
       content: (
         <div className="text-center">
           <div className="text-6xl mb-4">🏦</div>
-          <h3 className="text-xl font-bold text-[#832625] mb-2">Welcome to BSNB Banking!</h3>
+          <h3 className="text-xl font-bold text-[#832625] mb-2">Welcome to QNB Banking!</h3>
           <p className="text-gray-600">Your secure and convenient banking solution</p>
         </div>
       )
@@ -153,13 +153,13 @@ const Onboarding = ({ isOpen, onClose, onComplete }) => {
     },
     {
       title: "You're All Set!",
-      description: "You now know how to use all the key features of BSNB Banking.",
+      description: "You now know how to use all the key features of QNB Banking.",
       image: "✅",
       content: (
         <div className="text-center">
           <div className="text-6xl mb-4">✅</div>
           <h3 className="text-xl font-bold text-[#832625] mb-2">You're All Set!</h3>
-          <p className="text-gray-600 mb-4">You now know how to use all the key features of BSNB Banking.</p>
+          <p className="text-gray-600 mb-4">You now know how to use all the key features of QNB Banking.</p>
           <div className="bg-green-50 p-4 rounded-lg">
             <h4 className="font-semibold text-green-800 mb-2">Quick Tips:</h4>
             <ul className="text-sm text-green-700 space-y-1">

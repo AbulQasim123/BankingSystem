@@ -46,12 +46,12 @@ const Login = () => {
         <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 ring-1 ring-white/20">
           <FaLandmark />
         </span>
-        <span className="font-display font-bold text-xl">BSNB</span>
+        <span className="font-display font-bold text-xl">QNB</span>
       </Link>
 
       <div className="card-modern w-full max-w-md p-6 sm:p-8 animate-fade-up">
         <h2 className="font-display text-2xl font-bold text-ink">Welcome back</h2>
-        <p className="text-gray-500 text-sm mt-1 mb-6">Sign in to your BSNB account</p>
+        <p className="text-gray-500 text-sm mt-1 mb-6">Sign in to your QNB account</p>
 
         <div className="space-y-4">
           <div>
@@ -103,7 +103,7 @@ const Login = () => {
         </div>
 
         <p className="mt-6 text-center text-sm text-gray-600">
-          New to BSNB? <Link to="/register" className="text-primary font-semibold hover:underline">Create an account</Link>
+          New to QNB? <Link to="/register" className="text-primary font-semibold hover:underline">Create an account</Link>
         </p>
       </div>
 

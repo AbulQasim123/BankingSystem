@@ -71,7 +71,7 @@ const BalanceCard = () => {
       {/* Header: brand + account selector */}
       <div className="relative flex items-start justify-between gap-3">
         <div>
-          <p className="font-display font-bold tracking-wide text-lg leading-none">BSNB</p>
+          <p className="font-display font-bold tracking-wide text-lg leading-none">QNB</p>
           <p className="text-[11px] uppercase tracking-[0.2em] text-light/70 mt-1">Debit</p>
         </div>
         <div className="w-40 sm:w-52">

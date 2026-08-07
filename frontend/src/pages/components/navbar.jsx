@@ -31,8 +31,8 @@ const Navbar = ({ onShowHelp }) => {
         <FaLandmark className="text-base" />
       </span>
       <span className="leading-tight text-left">
-        <span className="block font-display font-bold text-primary text-base sm:text-lg">BSNB</span>
-        <span className="block text-[10px] sm:text-xs text-gray-500 -mt-0.5">Bhumil Shah National Bank</span>
+        <span className="block font-display font-bold text-primary text-base sm:text-lg">QNB</span>
+        <span className="block text-[10px] sm:text-xs text-gray-500 -mt-0.5">Qasim National Bank</span>
       </span>
     </button>
   );

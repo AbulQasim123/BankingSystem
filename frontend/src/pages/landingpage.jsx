@@ -40,7 +40,7 @@ const LandingPage = () => {
       <section className="bg-brand-gradient text-white">
         <div className="container-responsive py-12 sm:py-16 lg:py-20 grid lg:grid-cols-2 gap-10 items-center">
           <div className="animate-fade-up">
-            <p className="section-eyebrow !text-accent-light">Bhumil Shah National Bank</p>
+            <p className="section-eyebrow !text-accent-light">Qasim National Bank</p>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold mt-3 leading-[1.05] text-balance">
               Banking that works <span className="text-accent-light">as hard as you do</span>
             </h1>
@@ -122,7 +122,7 @@ const LandingPage = () => {
         <div className="container-responsive py-14 sm:py-20 text-center">
           <h2 className="font-display text-3xl sm:text-4xl font-bold mb-3 text-balance">Ready to get started?</h2>
           <p className="text-primary-100 text-lg mb-8 max-w-2xl mx-auto text-pretty">
-            Join thousands of customers who trust BSNB for everyday banking.
+            Join thousands of customers who trust QNB for everyday banking.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button onClick={() => navigate('/register')} className="btn-accent text-base">
@@ -141,8 +141,8 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="bg-primary-800 text-primary-100">
         <div className="container-responsive py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
-          <span className="font-display font-bold text-white">BSNB</span>
-          <span>© {new Date().getFullYear()} Bhumil Shah National Bank. All rights reserved.</span>
+          <span className="font-display font-bold text-white">QNB</span>
+          <span>© {new Date().getFullYear()} Qasim National Bank. All rights reserved.</span>
         </div>
       </footer>
     </div>
