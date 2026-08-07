@@ -1,5 +1,5 @@
 -- ============================================================
---  BSNB Banking System - PostgreSQL schema (Neon)
+--  QNB Banking System - PostgreSQL schema (Neon)
 --  Run this once against your Neon database before starting the app:
 --    psql "<your DATABASE_URL>" -f schema.sql
 --  (or paste it into the Neon SQL editor)

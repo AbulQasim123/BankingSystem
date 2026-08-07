@@ -1,4 +1,4 @@
-# 🏦 BSNB Banking System
+# 🏦 QNB Banking System
 
 A full-stack banking system built with Node.js, PostgreSQL (hosted on [Neon](https://neon.tech)), and React. This system supports user registration, authentication, bank account management, money transfers, transaction logging via SQL triggers, and robust error handling for safe financial operations.
 
