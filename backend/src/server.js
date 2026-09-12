@@ -5,7 +5,7 @@ const config = require("./config/config");
 const PORT = config.port;
 
 // Verify the database connection on startup.
-console.log("Connecting to PostgreSQL (Neon)...");
+console.log("Connecting to PostgreSQL...");
 pool
   .connect()
   .then((client) => {
