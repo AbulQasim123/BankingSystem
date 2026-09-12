@@ -25,18 +25,18 @@ const ModalWrapper = ({ children, onClose, type }) => (
 
 const getAccountNumbers = async (setAccountNumbers, setLoading) => {
   const user_id = localStorage.getItem('user_id')
-  if(user_id) {
+  if (user_id) {
     setLoading(true);
     try {
-        const response = await api.get(`/accounts/allaccounts/${user_id}`);
-        if(response.status === 200) {
-            setAccountNumbers(response.data.accounts);
-        }
-      } catch (e) { 
-        alert("Error Fetching Accounts! ");
-      } finally {
-        setLoading(false);
+      const response = await api.get(`/accounts/allaccounts/${user_id}`);
+      if (response.status === 200) {
+        setAccountNumbers(response.data.accounts);
       }
+    } catch (e) {
+      alert("Error Fetching Accounts! ");
+    } finally {
+      setLoading(false);
+    }
   }
 };
 
@@ -53,7 +53,7 @@ const Modals = ({ type, onClose }) => {
   const [accountNumbers, setAccountNumbers] = useState([]);
   const [baccount, setBaccount] = useState(accountNumbers[0]);
   const [statements, setStatements] = useState([]);
-  
+
   // loading states
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingStatements, setIsLoadingStatements] = useState(false);
@@ -78,19 +78,19 @@ const Modals = ({ type, onClose }) => {
       <ArrowUpRight className="text-red-600 ml-2" />
     );
   };
-  
+
   // transactions
   const [taccount, setTaccount] = useState(0);
   const [tamount, setTamount] = useState(0);
   const [ttype, setTtype] = useState("deposit");
   const [tdesc, setTdesc] = useState("");
-  
+
   // transfers
   const [ban, setBan] = useState(0);
   const [san, setSan] = useState(0);
   const [ftamount, setFtamount] = useState(0);
-  const [ftdesc, setFtdesc] = useState("");  
-  
+  const [ftdesc, setFtdesc] = useState("");
+
   // investments
   const [roi, setRoi] = useState(0);
   const [simple, setSimple] = useState(true);
@@ -99,7 +99,7 @@ const Modals = ({ type, onClose }) => {
   const [amount, setAmount] = useState(0);
   const [si, setSi] = useState(0);
   const [ci, setCi] = useState(0);
-  
+
   // loans
   const [loanType, setLoanType] = useState("");
   const [isSenior, setIsSenior] = useState(false);
@@ -107,26 +107,33 @@ const Modals = ({ type, onClose }) => {
   const [noofloanmonths, setNoofloanmonths] = useState(0);
   const [emi, setEmi] = useState(0);
 
+  // crypto
+  const [selectedCrypto, setSelectedCrypto] = useState("Bitcoin");
+  const [cryptoAction, setCryptoAction] = useState("buy");
+  const [cryptoAmount, setCryptoAmount] = useState("");
+  const [cryptoResult, setCryptoResult] = useState(null);
+
   // not include some arithematic symbols
   const handleKeyDown = (e) => {
     if (["e", "E", "+", "-"].includes(e.key)) {
-     e.preventDefault();
-  }}
+      e.preventDefault();
+    }
+  }
 
   // this will shoot eveytime modal renders
   useEffect(() => {
     getAccountNumbers(setAccountNumbers, setIsLoading);
-  }, []); 
+  }, []);
 
   switch (type) {
     case "Create Account":
       const handleCreateAccount = async () => {
-        
-        if(user_id === '' || isNaN(account_number) || account_type === '') {
+
+        if (user_id === '' || isNaN(account_number) || account_type === '') {
           return alert("Insufficient Details");
         }
 
-        if(!(/^15\d{10}$/.test(account_number))) {
+        if (!(/^15\d{10}$/.test(account_number))) {
           return alert("Incorrect Account Number Format");
         }
 
@@ -136,11 +143,11 @@ const Modals = ({ type, onClose }) => {
             user_id, account_number, account_type
           });
 
-          if(response.status === 201) {
+          if (response.status === 201) {
             alert(response.data.message);
           }
 
-        } catch (e) { 
+        } catch (e) {
           return alert(e.response.data.message);
         } finally {
           setIsLoading(false);
@@ -161,14 +168,14 @@ const Modals = ({ type, onClose }) => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Account Number</label>
-                <input 
-                  type="number" 
-                  placeholder="Enter 12-digit account number (starts with 15)" 
-                  required  
-                  onChange={(e)=>{
+                <input
+                  type="number"
+                  placeholder="Enter 12-digit account number (starts with 15)"
+                  required
+                  onChange={(e) => {
                     const value = e.target.value;
                     setAccount_number(value);
-                    
+
                     if (value.length > 0) {
                       if (!/^15\d{10}$/.test(value)) {
                         setAccountNumberError('Account number must start with 15 and be exactly 12 digits');
@@ -200,7 +207,7 @@ const Modals = ({ type, onClose }) => {
                   </label>
                 </div>
               </div>
-              <button 
+              <button
                 disabled={isLoading || accountNumberError}
                 className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
@@ -225,7 +232,7 @@ const Modals = ({ type, onClose }) => {
         setIsLoadingStatements(true);
         try {
           const response = await api.get(`/accounts/accountstatement/${baccount}`);
-          if(response.status === 200) {
+          if (response.status === 200) {
 
             const { transactions, transfers } = response.data;
             const combined = [
@@ -234,7 +241,7 @@ const Modals = ({ type, onClose }) => {
                 time: new Date(t.transaction_time).toLocaleString(),
                 status: t.status,
                 amount: t.amount,
-                transaction_type:t.transaction_type[0].toUpperCase() + t.transaction_type.slice(1),
+                transaction_type: t.transaction_type[0].toUpperCase() + t.transaction_type.slice(1),
                 description: t.description,
                 direction: t.transaction_type === "deposit" ? "in" : "out",
               })),
@@ -243,22 +250,22 @@ const Modals = ({ type, onClose }) => {
                 time: new Date(t.transfer_time).toLocaleString(),
                 status: t.status,
                 amount: t.amount,
-                transfer_type: baccount === t.sender_account_number ? `Debited to account no. ${t.receiver_account_number}` 
-                                : `Credited from account no. ${t.sender_account_number}`,
+                transfer_type: baccount === t.sender_account_number ? `Debited to account no. ${t.receiver_account_number}`
+                  : `Credited from account no. ${t.sender_account_number}`,
                 description: t.description,
                 direction: baccount === t.receiver_account_number ? "in" : "out",
               })),
             ];
-    
+
             const sorted = combined.sort((a, b) => new Date(b.time) - new Date(a.time));
             setStatements(sorted);
           }
-        } catch (e) { 
+        } catch (e) {
           return alert(e.response.data.message);
         } finally {
           setIsLoadingStatements(false);
         }
-      } 
+      }
       return (
         <>
           <ModalWrapper onClose={onClose} type={type}>
@@ -280,8 +287,8 @@ const Modals = ({ type, onClose }) => {
                 />
               </div>
 
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={isLoadingStatements}
                 className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
@@ -334,28 +341,28 @@ const Modals = ({ type, onClose }) => {
         </>
       );
 
-      case "Deposit/Withdrawal":
-        const handleTransactions = async () => {
-          // Validation - return early if invalid
-          if (!(/^15\d{10}$/.test(taccount))) {
-            alert("Enter Correct Details");
-            return; // Stop execution here
+    case "Deposit/Withdrawal":
+      const handleTransactions = async () => {
+        // Validation - return early if invalid
+        if (!(/^15\d{10}$/.test(taccount))) {
+          alert("Enter Correct Details");
+          return; // Stop execution here
+        }
+
+        setIsLoadingTransaction(true);
+        try {
+          const response = await api.post("/transactions/add/", {
+            taccount, tamount, ttype, tdesc
+          });
+          if (response.status === 200) {
+            return alert("Transaction Complete");
           }
-      
-          setIsLoadingTransaction(true);
-          try {
-            const response = await api.post("/transactions/add/", {
-              taccount, tamount, ttype, tdesc
-            });
-            if (response.status === 200) {
-              return alert("Transaction Complete");
-            }
-          } catch (e) {
-            return alert(e.response.data.message);
-          } finally {
-            setIsLoadingTransaction(false);
-          }
-        };
+        } catch (e) {
+          return alert(e.response.data.message);
+        } finally {
+          setIsLoadingTransaction(false);
+        }
+      };
       return (
         <>
           <ModalWrapper onClose={onClose}>
@@ -366,26 +373,26 @@ const Modals = ({ type, onClose }) => {
             <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); handleTransactions(); }}>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Account Number</label>
-                <input 
-                  type="number" 
-                  placeholder="Enter 12-digit account number" 
-                  required 
+                <input
+                  type="number"
+                  placeholder="Enter 12-digit account number"
+                  required
                   onKeyDown={handleKeyDown}
-                  className="input-modern" 
-                  onChange={(e) => {setTaccount(parseInt(e.target.value))}} 
+                  className="input-modern"
+                  onChange={(e) => { setTaccount(parseInt(e.target.value)) }}
                 />
               </div>
-    
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Amount</label>
-                <input 
-                  type="number" 
-                  step="0.01" 
-                  placeholder="Enter amount" 
-                  required 
+                <input
+                  type="number"
+                  step="0.01"
+                  placeholder="Enter amount"
+                  required
                   onKeyDown={handleKeyDown}
-                  className="input-modern" 
-                  onChange={(e) => {setTamount(e.target.value)}} 
+                  className="input-modern"
+                  onChange={(e) => { setTamount(e.target.value) }}
                 />
               </div>
 
@@ -405,15 +412,15 @@ const Modals = ({ type, onClose }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
-                <input 
-                  type="text" 
-                  placeholder="Add a note about this transaction" 
-                  onChange={(e)=> {setTdesc(e.target.value)}}
-                  className="input-modern" 
+                <input
+                  type="text"
+                  placeholder="Add a note about this transaction"
+                  onChange={(e) => { setTdesc(e.target.value) }}
+                  className="input-modern"
                 />
               </div>
 
-              <button 
+              <button
                 disabled={isLoadingTransaction}
                 className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
@@ -436,7 +443,7 @@ const Modals = ({ type, onClose }) => {
       const handleFundsTransfer = async () => {
 
         const accregex = /^15\d{10}$/;
-        if(!accregex.test(ban) || !accregex.test(san) || san === ban) {
+        if (!accregex.test(ban) || !accregex.test(san) || san === ban) {
           return alert("Enter Correct details")
         }
         setIsLoadingTransfer(true);
@@ -444,12 +451,12 @@ const Modals = ({ type, onClose }) => {
           const response = await api.post("/transfers/transfer-money", {
             san, ban, ftamount, ftdesc
           });
-          if(response.status === 200) { 
-            alert(response.data.message); 
+          if (response.status === 200) {
+            alert(response.data.message);
           }
 
-        } catch (e) { 
-          alert(e.response.data.message); 
+        } catch (e) {
+          alert(e.response.data.message);
         } finally {
           setIsLoadingTransfer(false);
         }
@@ -464,14 +471,14 @@ const Modals = ({ type, onClose }) => {
             <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); handleFundsTransfer(); }}>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Beneficiary Account Number</label>
-                <input 
-                  type="number" 
-                  maxLength={12} 
-                  placeholder="Enter recipient's 12-digit account number" 
-                  required 
+                <input
+                  type="number"
+                  maxLength={12}
+                  placeholder="Enter recipient's 12-digit account number"
+                  required
                   onKeyDown={handleKeyDown}
-                  className="input-modern" 
-                  onChange={(e)=>{setBan(parseInt(e.target.value))}}
+                  className="input-modern"
+                  onChange={(e) => { setBan(parseInt(e.target.value)) }}
                 />
               </div>
 
@@ -490,30 +497,30 @@ const Modals = ({ type, onClose }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Transfer Amount</label>
-                <input 
-                  type="number" 
-                  step="0.01" 
-                  placeholder="Enter amount (₹1 - ₹10,00,000)" 
-                  required 
-                  min={1} 
-                  max={1000000} 
+                <input
+                  type="number"
+                  step="0.01"
+                  placeholder="Enter amount (₹1 - ₹10,00,000)"
+                  required
+                  min={1}
+                  max={1000000}
                   onKeyDown={handleKeyDown}
-                  className="input-modern" 
-                  onChange={(e)=>{setFtamount(parseFloat(e.target.value))}} 
+                  className="input-modern"
+                  onChange={(e) => { setFtamount(parseFloat(e.target.value)) }}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
-                <input 
-                  type="text" 
-                  placeholder="Add a note about this transfer" 
-                  className="input-modern" 
-                  onChange={(e)=>{setFtdesc(e.target.value)}}
+                <input
+                  type="text"
+                  placeholder="Add a note about this transfer"
+                  className="input-modern"
+                  onChange={(e) => { setFtdesc(e.target.value) }}
                 />
               </div>
 
-              <button 
+              <button
                 disabled={isLoadingTransfer}
                 className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
@@ -562,130 +569,130 @@ const Modals = ({ type, onClose }) => {
         </ModalWrapper>
       );
 
-      case "Loans":
-        const baseRates = {
-          Home: 8.5,
-          Education: 6.8,
-          Car: 9.2,
-          Business: 11.5
-        };
-      
-        const calculateInterest = () => {
-          let rate = baseRates[loanType] || 0;
-          if ((loanType === "Home" || loanType === "Business") && isSenior) rate -= 0.5;
-          return rate.toFixed(2);
-        };
+    case "Loans":
+      const baseRates = {
+        Home: 8.5,
+        Education: 6.8,
+        Car: 9.2,
+        Business: 11.5
+      };
 
-        const calculateEMI = () => {
-          const principal = parseFloat(principalLoanAmount);
-          const months = parseInt(noofloanmonths);
-          const r = (baseRates[loanType] || 0) - (isSenior ? 0.5 : 0);
-        
-          if (!principal || !months || !r) return;
-        
-          const monthlyRate = r / 1200;
-          const factor = Math.pow(1 + monthlyRate, months);
-          const emic = (principal * monthlyRate * factor) / (factor - 1);
-        
-          setEmi(emic);
-        };
+      const calculateInterest = () => {
+        let rate = baseRates[loanType] || 0;
+        if ((loanType === "Home" || loanType === "Business") && isSenior) rate -= 0.5;
+        return rate.toFixed(2);
+      };
 
-        const total = emi * noofloanmonths;
+      const calculateEMI = () => {
+        const principal = parseFloat(principalLoanAmount);
+        const months = parseInt(noofloanmonths);
+        const r = (baseRates[loanType] || 0) - (isSenior ? 0.5 : 0);
 
-        return (
-          <ModalWrapper onClose={onClose}>
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Loan Calculator</h2>
-              <p className="text-gray-600 text-sm">Calculate your EMI and interest</p>
-            </div>
-            <div className="space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 items-start">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Loan Type</label>
-                  <ThemedSelect
-                    value={loanType}
-                    onChange={(v) => setLoanType(v)}
-                    placeholder="Select loan type"
-                    options={[
-                      { value: 'Home', label: 'Home Loan' },
-                      { value: 'Education', label: 'Education Loan' },
-                      { value: 'Car', label: 'Car Loan' },
-                      { value: 'Business', label: 'Business Loan' },
-                    ]}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Annual Rate</label>
-                  <div className="input-modern w-full sm:w-32 bg-primary-50 border-primary-100 text-primary font-semibold text-center">
-                    {loanType ? `${calculateInterest()}%` : '—'}
-                  </div>
-                </div>
-              </div>
+        if (!principal || !months || !r) return;
 
-              <label className="flex items-center gap-3 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  name="senior"
-                  onChange={() => setIsSenior(!isSenior)}
-                  checked={isSenior}
-                  className="w-4 h-4 accent-primary rounded"
-                />
-                <span className="text-sm text-ink">Senior Citizen <span className="text-success font-medium">(-0.5%)</span></span>
-              </label>
+        const monthlyRate = r / 1200;
+        const factor = Math.pow(1 + monthlyRate, months);
+        const emic = (principal * monthlyRate * factor) / (factor - 1);
 
+        setEmi(emic);
+      };
+
+      const total = emi * noofloanmonths;
+
+      return (
+        <ModalWrapper onClose={onClose}>
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Loan Calculator</h2>
+            <p className="text-gray-600 text-sm">Calculate your EMI and interest</p>
+          </div>
+          <div className="space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 items-start">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Requested Amount</label>
-                <input
-                  type="number"
-                  placeholder="Enter amount"
-                  required
-                  className="input-modern"
-                  onChange={(e) => { setPrincipalLoanAmount(e.target.value); }}
+                <label className="block text-sm font-medium text-gray-700 mb-2">Loan Type</label>
+                <ThemedSelect
+                  value={loanType}
+                  onChange={(v) => setLoanType(v)}
+                  placeholder="Select loan type"
+                  options={[
+                    { value: 'Home', label: 'Home Loan' },
+                    { value: 'Education', label: 'Education Loan' },
+                    { value: 'Car', label: 'Car Loan' },
+                    { value: 'Business', label: 'Business Loan' },
+                  ]}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Number of Months</label>
-                <input
-                  type="number"
-                  placeholder="Enter tenure in months"
-                  required
-                  className="input-modern"
-                  min={0}
-                  onChange={(e) => { setNoofloanmonths(e.target.value); }}
-                />
-              </div>
-              <div className="bg-light border border-gray-300 p-5 mt-2 rounded-lg">
-                <h4 className="font-bold text-gray-800 mb-3">Calculation Results:</h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Monthly EMI:</span>
-                    <span className="font-bold text-primary">₹{emi.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Principal Amount:</span>
-                    <span className="font-semibold">₹{parseFloat(principalLoanAmount).toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Total Interest:</span>
-                    <span className="font-semibold text-warning">₹{parseFloat((total - principalLoanAmount) > 0 ? (total - principalLoanAmount) : 0).toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between pt-2 border-t border-gray-300">
-                    <span className="text-gray-700 font-semibold">Total Amount:</span>
-                    <span className="font-bold text-success">₹{parseFloat(total).toFixed(2)}</span>
-                  </div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Annual Rate</label>
+                <div className="input-modern w-full sm:w-32 bg-primary-50 border-primary-100 text-primary font-semibold text-center">
+                  {loanType ? `${calculateInterest()}%` : '—'}
                 </div>
               </div>
-              <button onClick={calculateEMI} className="btn-primary w-full">Calculate EMI</button>
             </div>
-          </ModalWrapper>
-        );
+
+            <label className="flex items-center gap-3 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                name="senior"
+                onChange={() => setIsSenior(!isSenior)}
+                checked={isSenior}
+                className="w-4 h-4 accent-primary rounded"
+              />
+              <span className="text-sm text-ink">Senior Citizen <span className="text-success font-medium">(-0.5%)</span></span>
+            </label>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Requested Amount</label>
+              <input
+                type="number"
+                placeholder="Enter amount"
+                required
+                className="input-modern"
+                onChange={(e) => { setPrincipalLoanAmount(e.target.value); }}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Number of Months</label>
+              <input
+                type="number"
+                placeholder="Enter tenure in months"
+                required
+                className="input-modern"
+                min={0}
+                onChange={(e) => { setNoofloanmonths(e.target.value); }}
+              />
+            </div>
+            <div className="bg-light border border-gray-300 p-5 mt-2 rounded-lg">
+              <h4 className="font-bold text-gray-800 mb-3">Calculation Results:</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Monthly EMI:</span>
+                  <span className="font-bold text-primary">₹{emi.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Principal Amount:</span>
+                  <span className="font-semibold">₹{parseFloat(principalLoanAmount).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Total Interest:</span>
+                  <span className="font-semibold text-warning">₹{parseFloat((total - principalLoanAmount) > 0 ? (total - principalLoanAmount) : 0).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between pt-2 border-t border-gray-300">
+                  <span className="text-gray-700 font-semibold">Total Amount:</span>
+                  <span className="font-bold text-success">₹{parseFloat(total).toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+            <button onClick={calculateEMI} className="btn-primary w-full">Calculate EMI</button>
+          </div>
+        </ModalWrapper>
+      );
 
     case "Investments":
       const simpleInt = () => {
         const principal = parseFloat(amount);
         const roig = parseFloat(roi);
         const moninyear = parseFloat(noofmonths / 12) + parseFloat(nooyears);
-        
+
         setSi(parseFloat(principal * roig * moninyear / 100));
       };
       const compoundInt = () => {
@@ -702,24 +709,24 @@ const Modals = ({ type, onClose }) => {
           </div>
           <div className="space-y-5">
             <div className="flex items-center">
-              <input type="number" placeholder="Rate of Interest" required className="w-full border rounded p-2"  min={0}
-              onChange={(e) => {setRoi(e.target.value)}}/>
+              <input type="number" placeholder="Rate of Interest" required className="w-full border rounded p-2" min={0}
+                onChange={(e) => { setRoi(e.target.value) }} />
               <span className="ml-2">%</span>
             </div>
 
             <input type="number" placeholder="Amount" required
-             className="w-full border rounded p-2" onChange={(e) => {setAmount(e.target.value);}}/>
+              className="w-full border rounded p-2" onChange={(e) => { setAmount(e.target.value); }} />
 
             <div className="flex space-x-4">
-              <label><input type="radio" name="intType" value="Simple" required defaultChecked onClick={() => {setSimple(true);}}/> Simple</label>
-              <label><input type="radio" name="intType" value="Compound" required onClick={() => {setSimple(false);}} /> Compound</label>
+              <label><input type="radio" name="intType" value="Simple" required defaultChecked onClick={() => { setSimple(true); }} /> Simple</label>
+              <label><input type="radio" name="intType" value="Compound" required onClick={() => { setSimple(false); }} /> Compound</label>
             </div>
 
-            <input type="number" placeholder="No. of Years" required 
-             className="w-full border rounded p-2" onChange={(e) => {setNoofyears(e.target.value);}}/>
+            <input type="number" placeholder="No. of Years" required
+              className="w-full border rounded p-2" onChange={(e) => { setNoofyears(e.target.value); }} />
 
             <input type="number" placeholder="No. of Months" required min={0} max={11}
-             className="w-full border rounded p-2" onChange={(e) => {setNoofmonths(e.target.value);}}/>
+              className="w-full border rounded p-2" onChange={(e) => { setNoofmonths(e.target.value); }} />
 
             <div className="bg-light border border-gray-300 p-5 mt-2 rounded-lg">
               <h4 className="font-bold text-gray-800 mb-3">
@@ -753,35 +760,323 @@ const Modals = ({ type, onClose }) => {
                 </div>
               )}
             </div>
-            <button onClick={() => {simple ? simpleInt() : compoundInt()}} className="btn-primary w-full">Calculate Returns</button>
+            <button onClick={() => { simple ? simpleInt() : compoundInt() }} className="btn-primary w-full">Calculate Returns</button>
           </div>
         </ModalWrapper>
       );
 
     case "Crypto":
+      const cryptoData = {
+        Bitcoin: {
+          symbol: "BTC",
+          price: 6500000,
+          icon: <FaBitcoin className="text-2xl" />,
+          color: "text-amber-600",
+          bg: "bg-amber-50",
+        },
+        Ethereum: {
+          symbol: "ETH",
+          price: 280000,
+          icon: <FaEthereum className="text-2xl" />,
+          color: "text-indigo-600",
+          bg: "bg-indigo-50",
+        },
+        Dogecoin: {
+          symbol: "DOGE",
+          price: 18,
+          icon: <FaCoins className="text-2xl" />,
+          color: "text-yellow-600",
+          bg: "bg-yellow-50",
+        },
+      };
+
+      const selectedCoin = cryptoData[selectedCrypto];
+
+      const calculateCrypto = () => {
+        const amountValue = parseFloat(cryptoAmount);
+
+        if (!amountValue || amountValue <= 0) {
+          alert("Please enter a valid amount");
+          return;
+        }
+
+        const cryptoQuantity = amountValue / selectedCoin.price;
+
+        setCryptoResult({
+          coin: selectedCrypto,
+          symbol: selectedCoin.symbol,
+          action: cryptoAction,
+          amount: amountValue,
+          quantity: cryptoQuantity,
+          price: selectedCoin.price,
+        });
+      };
+
+      const resetCrypto = () => {
+        setCryptoAmount("");
+        setCryptoResult(null);
+      };
+
       return (
         <ModalWrapper onClose={onClose}>
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Cryptocurrency</h2>
-            <p className="text-gray-600 text-sm">Explore digital currency options</p>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+              Cryptocurrency
+            </h2>
+
+            <p className="text-gray-600 text-sm">
+              Calculate cryptocurrency purchase and selling values
+            </p>
           </div>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="card-modern p-6 flex flex-col items-center text-center gap-2">
-              <span className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-amber-50 text-amber-600"><FaBitcoin className="text-2xl" /></span>
-              <p className="font-semibold text-ink">Bitcoin</p>
-            </div>
-            <div className="card-modern p-6 flex flex-col items-center text-center gap-2">
-              <span className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600"><FaEthereum className="text-2xl" /></span>
-              <p className="font-semibold text-ink">Ethereum</p>
-            </div>
-            <div className="card-modern p-6 flex flex-col items-center text-center gap-2">
-              <span className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-yellow-50 text-yellow-600"><FaCoins className="text-2xl" /></span>
-              <p className="font-semibold text-ink">Dogecoin</p>
+
+          {/* Cryptocurrency Selection */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+            {Object.keys(cryptoData).map((coin) => {
+              const data = cryptoData[coin];
+
+              return (
+                <button
+                  key={coin}
+                  type="button"
+                  onClick={() => {
+                    setSelectedCrypto(coin);
+                    setCryptoResult(null);
+                  }}
+                  className={`card-modern p-4 flex flex-col items-center text-center gap-2 transition ${selectedCrypto === coin
+                    ? "border-2 border-primary bg-light"
+                    : "border-2 border-transparent"
+                    }`}
+                >
+                  <span
+                    className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${data.bg} ${data.color}`}
+                  >
+                    {data.icon}
+                  </span>
+
+                  <p className="font-semibold text-ink">
+                    {coin}
+                  </p>
+
+                  <p className="text-xs text-gray-500">
+                    {data.symbol}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Current Price */}
+          <div className="bg-light border border-gray-300 rounded-lg p-5 mb-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500">
+                  Selected Cryptocurrency
+                </p>
+
+                <p className="text-xl font-bold text-gray-800">
+                  {selectedCrypto}
+                </p>
+              </div>
+
+              <div className="text-right">
+                <p className="text-sm text-gray-500">
+                  Current Price
+                </p>
+
+                <p className="text-xl font-bold text-primary">
+                  ₹{selectedCoin.price.toLocaleString("en-IN")}
+                </p>
+
+                <p className="text-xs text-gray-500">
+                  1 {selectedCoin.symbol}
+                </p>
+              </div>
             </div>
           </div>
+
+          {/* Buy / Sell */}
+          <div className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Transaction Type
+              </label>
+
+              <div className="grid grid-cols-2 gap-3">
+                <label
+                  className={`border-2 rounded-lg p-4 cursor-pointer transition ${cryptoAction === "buy"
+                    ? "border-success bg-green-50"
+                    : "border-gray-300 hover:border-gray-400"
+                    }`}
+                >
+                  <input
+                    type="radio"
+                    name="cryptoAction"
+                    checked={cryptoAction === "buy"}
+                    onChange={() => {
+                      setCryptoAction("buy");
+                      setCryptoResult(null);
+                    }}
+                    className="mr-2"
+                  />
+
+                  <span className="font-medium">
+                    Buy
+                  </span>
+                </label>
+
+                <label
+                  className={`border-2 rounded-lg p-4 cursor-pointer transition ${cryptoAction === "sell"
+                    ? "border-danger bg-red-50"
+                    : "border-gray-300 hover:border-gray-400"
+                    }`}
+                >
+                  <input
+                    type="radio"
+                    name="cryptoAction"
+                    checked={cryptoAction === "sell"}
+                    onChange={() => {
+                      setCryptoAction("sell");
+                      setCryptoResult(null);
+                    }}
+                    className="mr-2"
+                  />
+
+                  <span className="font-medium">
+                    Sell
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            {/* Amount */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Amount
+              </label>
+
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                  ₹
+                </span>
+
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={cryptoAmount}
+                  placeholder="Enter amount in INR"
+                  className="input-modern pl-8"
+                  onKeyDown={handleKeyDown}
+                  onChange={(e) => {
+                    setCryptoAmount(e.target.value);
+                    setCryptoResult(null);
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Result */}
+            {cryptoResult && (
+              <div className="bg-light border border-gray-300 p-5 rounded-lg">
+                <h4 className="font-bold text-gray-800 mb-3">
+                  Calculation Results
+                </h4>
+
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">
+                      Cryptocurrency:
+                    </span>
+
+                    <span className="font-semibold">
+                      {cryptoResult.coin}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">
+                      Transaction Type:
+                    </span>
+
+                    <span
+                      className={`font-semibold ${cryptoResult.action === "buy"
+                        ? "text-success"
+                        : "text-danger"
+                        }`}
+                    >
+                      {cryptoResult.action === "buy"
+                        ? "Buy"
+                        : "Sell"}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">
+                      Price per {cryptoResult.symbol}:
+                    </span>
+
+                    <span className="font-semibold">
+                      ₹{cryptoResult.price.toLocaleString("en-IN")}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">
+                      Amount:
+                    </span>
+
+                    <span className="font-semibold">
+                      ₹{cryptoResult.amount.toLocaleString("en-IN")}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between pt-2 border-t border-gray-300">
+                    <span className="text-gray-700 font-semibold">
+                      {cryptoResult.action === "buy"
+                        ? "Crypto Received:"
+                        : "Crypto Sold:"}
+                    </span>
+
+                    <span
+                      className={`font-bold ${cryptoResult.action === "buy"
+                        ? "text-success"
+                        : "text-danger"
+                        }`}
+                    >
+                      {cryptoResult.quantity.toFixed(8)}{" "}
+                      {cryptoResult.symbol}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Buttons */}
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={calculateCrypto}
+                className="btn-primary w-full"
+              >
+                Calculate
+              </button>
+
+              <button
+                type="button"
+                onClick={resetCrypto}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100 transition"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+
+          {/* Information */}
           <div className="mt-6 bg-light border border-gray-300 rounded-lg p-4">
             <p className="text-gray-700 text-sm">
-              <strong>Coming Soon:</strong> Cryptocurrency services will be available soon. Stay tuned!
+              <strong>Note:</strong> Cryptocurrency prices shown here
+              are demo values for calculation purposes. No real
+              cryptocurrency transaction is performed.
             </p>
           </div>
         </ModalWrapper>

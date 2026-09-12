@@ -188,7 +188,7 @@ const Onboarding = ({ isOpen, onClose, onComplete }) => {
     }
   };
 
-    const handleComplete = () => {
+  const handleComplete = () => {
     localStorage.setItem('hasSeenOnboarding', 'true');
     setIsFirstTime(false);
     onComplete();
@@ -232,11 +232,10 @@ const Onboarding = ({ isOpen, onClose, onComplete }) => {
           <button
             onClick={handlePrevious}
             disabled={currentStep === 0}
-            className={`flex items-center space-x-2 px-4 py-2 rounded transition-colors ${
-              currentStep === 0
+            className={`flex items-center space-x-2 px-4 py-2 rounded transition-colors ${currentStep === 0
                 ? 'text-gray-400 cursor-not-allowed'
                 : 'text-[#832625] hover:bg-[#832625] hover:text-white'
-            }`}
+              }`}
           >
             <FaChevronLeft size={16} />
             <span>Previous</span>
@@ -246,13 +245,12 @@ const Onboarding = ({ isOpen, onClose, onComplete }) => {
             {steps.map((_, index) => (
               <div
                 key={index}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentStep
+                className={`w-2 h-2 rounded-full transition-colors ${index === currentStep
                     ? 'bg-[#832625]'
                     : index < currentStep
-                    ? 'bg-green-500'
-                    : 'bg-gray-300'
-                }`}
+                      ? 'bg-green-500'
+                      : 'bg-gray-300'
+                  }`}
               ></div>
             ))}
           </div>

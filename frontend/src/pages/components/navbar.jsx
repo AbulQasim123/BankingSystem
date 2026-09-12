@@ -2,15 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import ProfileDropdown from './profiledropdown';
 import { FaBell, FaBars, FaTimes, FaQuestionCircle, FaLandmark, FaChevronDown } from 'react-icons/fa';
-
-// Each top-level item opens a menu of links.
-const navItems = [
-  { title: 'Accounts & Deposits', links: ['Savings Account', 'Current Account', 'Fixed Deposit', 'Recurring Deposit', 'Salary Account'] },
-  { title: 'Cards', links: ['Debit Cards', 'Credit Cards', 'Card Offers', 'Block a Card', 'Rewards'] },
-  { title: 'Loans', links: ['Home Loan', 'Car Loan', 'Personal Loan', 'Education Loan', 'Gold Loan'] },
-  { title: 'Rates & Offers', links: ['Interest Rates', 'Festive Offers', 'Cashback Deals', 'Fee Schedule'] },
-  { title: 'Investments', links: ['Mutual Funds', 'Stocks & ETFs', 'Bonds', 'Insurance', 'Tax Saver'] },
-];
+import { navItems } from '../../data/navItems';
 
 const Navbar = ({ onShowHelp }) => {
   const [token, setToken] = useState(null);
@@ -66,10 +58,11 @@ const Navbar = ({ onShowHelp }) => {
                   <p className="px-3 pt-1.5 pb-2 text-[11px] font-semibold uppercase tracking-wide text-primary/70">{item.title}</p>
                   {item.links.map((link) => (
                     <button
-                      key={link}
+                      key={link.slug}
+                      onClick={() => navigate(`/info/${link.slug}`)}
                       className="w-full text-left px-3 py-2 rounded-lg text-sm text-ink/80 hover:bg-primary-50 hover:text-primary transition-colors"
                     >
-                      {link}
+                      {link.label}
                     </button>
                   ))}
                 </div>
@@ -149,10 +142,11 @@ const Navbar = ({ onShowHelp }) => {
                     <div className="pb-2 pl-3 flex flex-col">
                       {item.links.map((link) => (
                         <button
-                          key={link}
+                          key={link.slug}
+                          onClick={() => { navigate(`/info/${link.slug}`); setMenuOpen(false); setOpenMobileIdx(null); }}
                           className="text-left px-3 py-2 rounded-lg text-sm text-ink/70 hover:bg-primary-50 hover:text-primary transition-colors"
                         >
-                          {link}
+                          {link.label}
                         </button>
                       ))}
                     </div>

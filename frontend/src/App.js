@@ -8,6 +8,7 @@ import ProtectedRoute from './pages/ProtectedRoute';
 import GuestRoute from './pages/GuestRoute';
 import ForgotPassword from './pages/forgotPassword';
 import ResetPassword from './pages/resetPassword';
+import InfoPage from './pages/InfoPage';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         } />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/info/:slug" element={<InfoPage />} />
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <DashBoard />
