@@ -10,17 +10,17 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   const features = [
-    { title: 'Cards',       icon: FaRegCreditCard,  description: 'Debit & credit cards', tint: 'bg-violet-50 text-violet-700' },
-    { title: 'Loans',       icon: FaHandHoldingUsd, description: 'Home, car & personal', tint: 'bg-rose-50 text-rose-700' },
-    { title: 'Investments', icon: FaChartLine,      description: 'Smart growth options', tint: 'bg-emerald-50 text-emerald-700' },
-    { title: 'Accounts',    icon: FaPiggyBank,      description: 'Savings & current',    tint: 'bg-sky-50 text-sky-700' },
-    { title: 'Crypto',      icon: FaBitcoin,        description: 'Digital currencies',   tint: 'bg-amber-50 text-amber-700' },
+    { title: 'Cards', icon: FaRegCreditCard, description: 'Debit & credit cards', tint: 'bg-violet-50 text-violet-700' },
+    { title: 'Loans', icon: FaHandHoldingUsd, description: 'Home, car & personal', tint: 'bg-rose-50 text-rose-700' },
+    { title: 'Investments', icon: FaChartLine, description: 'Smart growth options', tint: 'bg-emerald-50 text-emerald-700' },
+    { title: 'Accounts', icon: FaPiggyBank, description: 'Savings & current', tint: 'bg-sky-50 text-sky-700' },
+    { title: 'Crypto', icon: FaBitcoin, description: 'Digital currencies', tint: 'bg-amber-50 text-amber-700' },
   ];
 
   const benefits = [
     { icon: FaShieldAlt, title: 'Secure Banking', description: '256-bit encryption protects every session.' },
-    { icon: FaMobileAlt, title: 'Mobile First',   description: 'Full-featured banking on any device.' },
-    { icon: FaHeadset,   title: '24/7 Support',   description: 'Real people, available around the clock.' },
+    { icon: FaMobileAlt, title: 'Mobile First', description: 'Full-featured banking on any device.' },
+    { icon: FaHeadset, title: '24/7 Support', description: 'Real people, available around the clock.' },
   ];
 
   return (
