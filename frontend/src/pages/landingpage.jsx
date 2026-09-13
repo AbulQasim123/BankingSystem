@@ -31,7 +31,7 @@ const LandingPage = () => {
       <div className="bg-primary text-light py-2 px-4">
         {/* eslint-disable-next-line jsx-a11y/no-distracting-elements */}
         <marquee behavior="scroll" className="font-medium text-sm sm:text-base">
-          Working hours of Kandivali and Borivali branches have changed from 09:00 A.M. to 04:30 P.M. •
+          Working hours of Bhiwandi and Mumbra branches have changed from 09:00 A.M. to 04:30 P.M. •
           Senior Citizen Interest Rates decreased by 0.5%
         </marquee>
       </div>
